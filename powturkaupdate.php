@@ -49,9 +49,26 @@
        <input type="submit" name="Zatwierdź" value="Zatwierdź">
      </form>
      <?php
+     $sql="select * from dane where id=$id";
+     $result=$connect->query($sql);
+     while($row=$result->fetch_assoc()){
+          $imie_default=$row["Imie"];
+          $date_default=$row["Urodziny"];
+     }
      if(isset($_POST['Zatwierdź'])){
-       $imie=$_POST['Imie'];
-       $data=$_POST['Urodziny'];
+       if($_POST['Imie']==""){
+         $imie=$imie_default;
+       }
+       else{
+         $imie=$_POST['Imie'];
+       }
+
+       if($_POST['Urodziny']==""){
+         $data=$date_default;
+       }
+       else{
+         $data=$_POST['Urodziny'];
+       }
        $wiek=date_diff(date_create($data),date_create(date("Y/m/d")));
        $wiek=$wiek->format('%y');
        $sql="UPDATE `dane` SET `Imie`='$imie',`Wiek`='$wiek',`Urodziny`='$data' WHERE id=$id";
